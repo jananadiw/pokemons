@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
 import { PokemonListResponse } from "./types/index";
-import PokemonCard from "./components/PokemonCard";
 
 export default function Page() {
   const [pokemon, setPokemon] = useState<PokemonListResponse["results"]>([]);
@@ -104,7 +104,13 @@ export default function Page() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {pokemon.map((item) => (
-            <PokemonCard key={item.name} name={item.name} />
+            <Link
+              href={`pokemon/${item.name}`}
+              key={item.name}
+              className="p-4 border rounded-lg hover:shadow-lg transition-shadow"
+            >
+              <div className="text-lg capitalize text-center">{item.name}</div>
+            </Link>
           ))}
         </div>
       )}
