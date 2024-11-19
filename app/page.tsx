@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { PokemonListResponse } from "./types/index";
+import PokemonCard from "./components/PokemonCard";
 
 export default function Page() {
   const [pokemon, setPokemon] = useState([]);
@@ -31,7 +32,8 @@ export default function Page() {
 
       setPokemon((prev) => {
         const newPokemon = data.results.filter(
-          (newPoke) => !prev.some((existingPoke) => existingPoke.name === newPoke.name)
+          (newPoke) =>
+            !prev.some((existingPoke) => existingPoke.name === newPoke.name),
         );
         return [...prev, ...newPokemon];
       });
@@ -85,7 +87,7 @@ export default function Page() {
       ) : (
         <div>
           {pokemon.map((item, index) => (
-            <div key={item.name}>{item.name}</div>
+            <PokemonCard key={item.name} name={item.name} />
           ))}
         </div>
       )}
