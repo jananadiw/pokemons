@@ -5,7 +5,7 @@ import { PokemonListResponse } from "./types/index";
 import PokemonCard from "./components/PokemonCard";
 
 export default function Page() {
-  const [pokemon, setPokemon] = useState([]);
+  const [pokemon, setPokemon] = useState<PokemonListResponse["results"]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [offset, setOffset] = useState(0);
@@ -74,33 +74,61 @@ export default function Page() {
   }, [fetchPokemons]);
 
   if (error) {
-    return <div>error</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center p-4">
+          <h2 className="text-xl font-bold text-red-600 mb-2">Error</h2>
+          <p className="text-gray-700">{error}</p>
+          <button
+            onClick={() => {
+              setError(null);
+              fetchPokemons();
+            }}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
   }
+
   return (
-    <div>
-      <h1>Pokemons</h1>
+    <div className="max-w-6xl mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6 text-center">Pokemon Directory</h1>
 
       {pokemon.length === 0 && loading ? (
-        <div>
+        <div className="flex justify-center">
           <p>Loading Pokemon...</p>
         </div>
       ) : (
-        <div>
-          {pokemon.map((item, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {pokemon.map((item) => (
             <PokemonCard key={item.name} name={item.name} />
           ))}
         </div>
       )}
 
-      <div ref={observerTarget}>
+      <div
+        ref={observerTarget}
+        className="h-20 flex items-center justify-center mt-4"
+      >
         {loading && (
-          <div>
-            <div />
-            <div style={{ animationDelay: "0.2s" }} />
-            <div style={{ animationDelay: "0.4s" }} />
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" />
+            <div
+              className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+              style={{ animationDelay: "0.2s" }}
+            />
+            <div
+              className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+              style={{ animationDelay: "0.4s" }}
+            />
           </div>
         )}
-        {!hasMore && pokemon.length > 0 && <p>No more!</p>}
+        {!hasMore && pokemon.length > 0 && (
+          <p className="text-gray-500">You've caught them all! 🎉</p>
+        )}
       </div>
     </div>
   );

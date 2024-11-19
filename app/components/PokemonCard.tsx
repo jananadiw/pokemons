@@ -34,15 +34,32 @@ export default function PokemonCard({ name }: PokemonCardProps) {
   };
 
   return (
-    <div onClick={fetchDetails}>
-      <h2>{name}</h2>
+    <div
+      className="border p-4 rounded-lg cursor-pointer"
+      onClick={fetchDetails}
+    >
+      <h2 className="text-xl capitalize">{name}</h2>
 
       {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
       {details && (
-        <div>
-          <img src={details.sprites.front_default} alt={name} />
+        <div className="mt-2">
+          <img
+            src={details.sprites.front_default}
+            alt={name}
+            className="w-24 h-24"
+          />
+          <div className="flex gap-2 mt-2">
+            {details.types.map((type) => (
+              <span
+                key={type.type.name}
+                className="px-2 py-1 bg-gray-200 rounded-full text-sm"
+              >
+                {type.type.name}
+              </span>
+            ))}
+          </div>
         </div>
       )}
     </div>
